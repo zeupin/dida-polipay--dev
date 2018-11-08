@@ -10,9 +10,9 @@
 namespace Dida\Polipay;
 
 /**
- * PoliAPI
+ * Polipay
  */
-class PoliAPI
+class Polipay
 {
     /**
      * 版本号
