@@ -6,6 +6,9 @@
  * Licensed under The MIT License.
  * Redistributions of files must retain the above copyright notice.
  */
+
+namespace Dida\Polipay;
+
 /**
  * PoliAPI
  */
@@ -80,7 +83,7 @@ class PoliAPI
      * ]
      *
      * @return array|null  成功返回正常的数组,失败返回null
-     * 
+     *
      * 典型的返回数据
      * {
      * "Success": true,
