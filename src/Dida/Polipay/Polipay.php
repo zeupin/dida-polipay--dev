@@ -105,7 +105,7 @@ class Polipay
         ];
 
         // 检查必填字段是否缺失
-        $required_fieldds = ["Amount", "CurrencyCode", "MerchantReference"];
+        $required_fields = ["Amount", "CurrencyCode", "MerchantReference"];
         $missing = $this->required($data, $required_fields);
         if ($missing) {
             $missing = implode(",", $missing);
@@ -124,8 +124,43 @@ class Polipay
         curl_setopt($ch, CURLOPT_POSTFIELDS, $jsondata);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 0);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 30); // 交易的最大允许时间设为30秒
 
-        // 查询
+        // 联机查询
+        $result = curl_exec($ch);
+        curl_close($ch);
+
+        // 解析成数组
+        $response = json_decode($result, true);
+
+        // 返回
+        return $response;
+    }
+
+
+    /**
+     * API文档的GETTransaction
+     *
+     * @param string $token
+     *
+     * @return array|false  成功返回向polipay查询的GETTransaction的应答数据,失败返回false
+     */
+    public function getTransaction($token)
+    {
+        // 如果token没有设置,则返回失败
+        if (!$token) {
+            return false;
+        }
+
+        // 准备curl
+        $url = 'https://poliapi.apac.paywithpoli.com/api/v2/Transaction/GetTransaction?token=' . urlencode($token);
+        $ch = $this->curlInit($url);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_POST, 0);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 0);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+        // 联机查询
         $result = curl_exec($ch);
         curl_close($ch);
 
